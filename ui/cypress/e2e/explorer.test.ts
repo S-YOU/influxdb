@@ -352,6 +352,10 @@ describe('DataExplorer', () => {
   describe('raw script editing', () => {
     beforeEach(() => {
       cy.getByTestID('switch-to-script-editor').click()
+
+      // explicitly wait, to give the CodeMirror editor a chance to render
+      // may not be necessary when we switch to Monaco
+      cy.wait(300)
     })
 
     it('enables the submit button when a query is typed', () => {
