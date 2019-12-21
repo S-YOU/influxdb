@@ -1429,8 +1429,15 @@ func (e *parseErr) append(errs ...resourceErr) {
 // it will return nil values for the parseErr, making it unsafe
 // to use.
 func IsParseErr(err error) bool {
-	_, ok := err.(*parseErr)
-	return ok
+	if _, ok := err.(*parseErr); ok {
+		return true
+	}
+
+	iErr, ok := err.(*influxdb.Error)
+	if !ok {
+		return false
+	}
+	return IsParseErr(iErr.Err)
 }
 
 func normStr(s string) string {
